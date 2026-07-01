@@ -10,10 +10,13 @@ class GHWorkspaceApp(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title(WINDOW_TITLE)
-        self.geometry(f"{DEFAULT_WINDOW_WIDTH}x{DEFAULT_WINDOW_HEIGHT}")
-
         self.app_state = AppState()
+
+        width = self.app_state.config_manager.get("window_width", DEFAULT_WINDOW_WIDTH)
+        height = self.app_state.config_manager.get("window_height", DEFAULT_WINDOW_HEIGHT)
+
+        self.title(WINDOW_TITLE)
+        self.geometry(f"{width}x{height}")
 
         self.sidebar = tk.Frame(self, width=200)
         self.sidebar.pack(side="left", fill="y")
@@ -25,7 +28,7 @@ class GHWorkspaceApp(tk.Tk):
 
         self.create_sidebar()
         self.create_pages()
-        self.show_page("dashboard")
+        self.show_page(self.app_state.current_page)
 
     def create_sidebar(self):
         tk.Label(
@@ -56,5 +59,8 @@ class GHWorkspaceApp(tk.Tk):
             page.place(relwidth=1, relheight=1)
 
     def show_page(self, name):
-        self.app_state.current_page = name
+        if name not in self.pages:
+            name = "dashboard"
+
+        self.app_state.set_current_page(name)
         self.pages[name].tkraise()
