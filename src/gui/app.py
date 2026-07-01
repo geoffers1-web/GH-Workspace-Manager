@@ -2,6 +2,7 @@ import tkinter as tk
 
 from config.settings import WINDOW_TITLE, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT
 from core.app_state import AppState
+from gui.theme_manager import ThemeManager
 from gui.pages.dashboard_page import DashboardPage
 from gui.pages.git_page import GitPage
 
@@ -11,6 +12,7 @@ class GHWorkspaceApp(tk.Tk):
         super().__init__()
 
         self.app_state = AppState()
+        self.theme_manager = ThemeManager(self.app_state)
 
         width = self.app_state.config_manager.get("window_width", DEFAULT_WINDOW_WIDTH)
         height = self.app_state.config_manager.get("window_height", DEFAULT_WINDOW_HEIGHT)
@@ -28,28 +30,40 @@ class GHWorkspaceApp(tk.Tk):
 
         self.create_sidebar()
         self.create_pages()
+        self.apply_theme()
         self.show_page(self.app_state.current_page)
 
     def create_sidebar(self):
-        tk.Label(
+        self.sidebar_title = tk.Label(
             self.sidebar,
             text="GH Workspace",
             font=("Arial", 14, "bold")
-        ).pack(pady=20)
+        )
+        self.sidebar_title.pack(pady=20)
 
-        tk.Button(
+        self.dashboard_button = tk.Button(
             self.sidebar,
             text="Dashboard",
             width=20,
             command=lambda: self.show_page("dashboard")
-        ).pack(pady=5)
+        )
+        self.dashboard_button.pack(pady=5)
 
-        tk.Button(
+        self.git_button = tk.Button(
             self.sidebar,
             text="Git Manager",
             width=20,
             command=lambda: self.show_page("git")
-        ).pack(pady=5)
+        )
+        self.git_button.pack(pady=5)
+
+        self.theme_button = tk.Button(
+            self.sidebar,
+            text="Toggle Theme",
+            width=20,
+            command=self.toggle_theme
+        )
+        self.theme_button.pack(pady=25)
 
     def create_pages(self):
         self.pages["dashboard"] = DashboardPage(self.content, self.app_state)
@@ -64,3 +78,37 @@ class GHWorkspaceApp(tk.Tk):
 
         self.app_state.set_current_page(name)
         self.pages[name].tkraise()
+
+    def toggle_theme(self):
+        current_theme = self.theme_manager.get_theme_name()
+        new_theme = "dark" if current_theme == "light" else "light"
+        self.theme_manager.set_theme_name(new_theme)
+        self.apply_theme()
+
+    def apply_theme(self):
+        theme = self.theme_manager.get_theme()
+
+        self.configure(bg=theme["bg"])
+        self.sidebar.configure(bg=theme["sidebar_bg"])
+        self.content.configure(bg=theme["content_bg"])
+
+        self.sidebar_title.configure(
+            bg=theme["sidebar_bg"],
+            fg=theme["fg"]
+        )
+
+        for button in [
+            self.dashboard_button,
+            self.git_button,
+            self.theme_button
+        ]:
+            button.configure(
+                bg=theme["button_bg"],
+                fg=theme["button_fg"],
+                activebackground=theme["content_bg"],
+                activeforeground=theme["fg"]
+            )
+
+        for page in self.pages.values():
+            if hasattr(page, "apply_theme"):
+                page.apply_theme(theme)
