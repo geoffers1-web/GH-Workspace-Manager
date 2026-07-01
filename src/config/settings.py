@@ -1,8 +1,9 @@
 APP_NAME = "GH Workspace Manager"
-APP_VERSION = "4.4"
+APP_VERSION = "4.5"
 WINDOW_TITLE = f"{APP_NAME} V{APP_VERSION}"
 
 DEFAULT_WINDOW_WIDTH = 1100
 DEFAULT_WINDOW_HEIGHT = 700
 
 CONFIG_FILE_NAME = "gh_workspace_config.json"
+LOG_FILE_NAME = "gh_workspace.log"

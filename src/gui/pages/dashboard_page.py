@@ -1,4 +1,5 @@
 import tkinter as tk
+from core.paths import APP_LOG_FILE
 
 
 class DashboardPage(tk.Frame):
@@ -19,3 +20,10 @@ class DashboardPage(tk.Frame):
             font=("Arial", 12)
         )
         message.pack(pady=10)
+
+        log_info = tk.Label(
+            self,
+            text=f"Log file: {APP_LOG_FILE}",
+            font=("Arial", 10)
+        )
+        log_info.pack(pady=10)
