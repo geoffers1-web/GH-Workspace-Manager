@@ -1,4 +1,20 @@
 from pathlib import Path
+
+def write(path, content):
+    p = Path(path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(content.strip() + "\n", encoding="utf-8")
+    print(f"Updated: {p}")
+
+write("run_builder.py", """
+from Builder.builder import main
+
+if __name__ == "__main__":
+    main()
+""")
+
+write("Builder/builder.py", """
+from pathlib import Path
 import json
 import shutil
 import subprocess
@@ -24,7 +40,7 @@ SNAPSHOT_ITEMS = ["src", "docs", "Builder", "README.md", "CHANGELOG.md"]
 
 
 def pause():
-    input("\nPress Enter to return to menu...")
+    input("\\nPress Enter to return to menu...")
 
 
 def load_settings():
@@ -54,7 +70,7 @@ def load_settings():
 
 
 def validate_structure():
-    print("\nValidating project structure...\n", flush=True)
+    print("\\nValidating project structure...\\n", flush=True)
     missing = []
 
     for item in REQUIRED_PATHS:
@@ -71,7 +87,7 @@ def validate_structure():
 
 
 def verify_imports():
-    print("\nVerifying Python imports...\n", flush=True)
+    print("\\nVerifying Python imports...\\n", flush=True)
     failed = []
 
     for file_path in sorted((PROJECT_ROOT / "src").rglob("*.py")):
@@ -97,7 +113,7 @@ def verify_imports():
 
 
 def show_git_status():
-    print("\nGit status:\n", flush=True)
+    print("\\nGit status:\\n", flush=True)
     result = subprocess.run(
         ["git", "status"],
         cwd=PROJECT_ROOT,
@@ -121,7 +137,7 @@ def create_release_snapshot(settings):
     release_name = settings["APP_RELEASE"]
     release_dir = RELEASES_DIR / release_name
 
-    print(f"\nCreating release snapshot: {release_name}\n", flush=True)
+    print(f"\\nCreating release snapshot: {release_name}\\n", flush=True)
     release_dir.mkdir(parents=True, exist_ok=True)
 
     for item in SNAPSHOT_ITEMS:
@@ -158,13 +174,13 @@ def create_release_snapshot(settings):
 
     notes = release_dir / "RELEASE_NOTES.md"
     if not notes.exists():
-        notes.write_text(f"# {release_name} Release Notes\n\nCreated by GH Workspace Builder V3.1.\n", encoding="utf-8")
+        notes.write_text(f"# {release_name} Release Notes\\n\\nCreated by GH Workspace Builder V3.1.\\n", encoding="utf-8")
 
-    print(f"\nRelease snapshot created at: {release_dir}", flush=True)
+    print(f"\\nRelease snapshot created at: {release_dir}", flush=True)
 
 
 def list_releases():
-    print("\nAvailable releases:\n", flush=True)
+    print("\\nAvailable releases:\\n", flush=True)
 
     if not RELEASES_DIR.exists():
         print("No releases folder found.", flush=True)
@@ -192,7 +208,7 @@ def show_manifest(settings):
     release_name = settings["APP_RELEASE"]
     manifest = RELEASES_DIR / release_name / "manifest.json"
 
-    print(f"\nManifest for {release_name}:\n", flush=True)
+    print(f"\\nManifest for {release_name}:\\n", flush=True)
 
     if not manifest.exists():
         print("No manifest found. Run option 4 first.", flush=True)
@@ -202,12 +218,12 @@ def show_manifest(settings):
 
 
 def health_check(settings):
-    print("\nRunning pre-release health check...", flush=True)
+    print("\\nRunning pre-release health check...", flush=True)
     structure_ok = validate_structure()
     imports_ok = verify_imports()
     clean = git_is_clean()
 
-    print("\nPre-release summary:")
+    print("\\nPre-release summary:")
     print(f"Structure ............. {'OK' if structure_ok else 'FAILED'}")
     print(f"Imports ............... {'OK' if imports_ok else 'FAILED'}")
     print(f"Git working tree ...... {'Clean' if clean else 'Changes pending'}")
@@ -240,7 +256,7 @@ def main():
         print("8. Show release manifest")
         print("0. Exit")
 
-        choice = input("\nSelect option: ").strip()
+        choice = input("\\nSelect option: ").strip()
 
         if choice == "1":
             validate_structure()
@@ -275,3 +291,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+""")
+
+print()
+print("Builder V3.1 repair installed.")
+print("Run: python run_builder.py")
