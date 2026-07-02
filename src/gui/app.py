@@ -6,6 +6,7 @@ from core.plugin_manager import PluginManager
 from gui.theme_manager import ThemeManager
 from plugins.dashboard_plugin import DashboardPlugin
 from plugins.git_plugin import GitPlugin
+from plugins.workspace_plugin import WorkspacePlugin
 
 
 class GHWorkspaceApp(tk.Tk):
@@ -40,13 +41,10 @@ class GHWorkspaceApp(tk.Tk):
     def register_plugins(self):
         self.plugin_manager.register_plugin(DashboardPlugin())
         self.plugin_manager.register_plugin(GitPlugin())
+        self.plugin_manager.register_plugin(WorkspacePlugin())
 
     def create_sidebar(self):
-        self.sidebar_title = tk.Label(
-            self.sidebar,
-            text="GH Workspace",
-            font=("Arial", 14, "bold")
-        )
+        self.sidebar_title = tk.Label(self.sidebar, text="GH Workspace", font=("Arial", 14, "bold"))
         self.sidebar_title.pack(pady=20)
 
         for plugin in self.plugin_manager.get_plugins():
@@ -59,12 +57,7 @@ class GHWorkspaceApp(tk.Tk):
             button.pack(pady=5)
             self.buttons.append(button)
 
-        self.theme_button = tk.Button(
-            self.sidebar,
-            text="Toggle Theme",
-            width=20,
-            command=self.toggle_theme
-        )
+        self.theme_button = tk.Button(self.sidebar, text="Toggle Theme", width=20, command=self.toggle_theme)
         self.theme_button.pack(pady=25)
         self.buttons.append(self.theme_button)
 
@@ -95,10 +88,7 @@ class GHWorkspaceApp(tk.Tk):
         self.sidebar.configure(bg=theme["sidebar_bg"])
         self.content.configure(bg=theme["content_bg"])
 
-        self.sidebar_title.configure(
-            bg=theme["sidebar_bg"],
-            fg=theme["fg"]
-        )
+        self.sidebar_title.configure(bg=theme["sidebar_bg"], fg=theme["fg"])
 
         for button in self.buttons:
             button.configure(
