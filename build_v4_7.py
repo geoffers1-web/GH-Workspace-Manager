@@ -1,4 +1,69 @@
-import tkinter as tk
+from pathlib import Path
+
+files = {
+    "src/config/settings.py": '''APP_NAME = "GH Workspace Manager"
+APP_VERSION = "4.7"
+WINDOW_TITLE = f"{APP_NAME} V{APP_VERSION}"
+
+DEFAULT_WINDOW_WIDTH = 1100
+DEFAULT_WINDOW_HEIGHT = 700
+
+CONFIG_FILE_NAME = "gh_workspace_config.json"
+LOG_FILE_NAME = "gh_workspace.log"
+DEFAULT_THEME = "light"
+''',
+
+    "src/core/plugin_manager.py": '''class PluginManager:
+    def __init__(self, app_state):
+        self.app_state = app_state
+        self.plugins = []
+
+    def register_plugin(self, plugin):
+        self.plugins.append(plugin)
+        self.app_state.logger.info(f"Plugin registered: {plugin.name}")
+
+    def get_plugins(self):
+        return self.plugins
+''',
+
+    "src/plugins/__init__.py": "",
+
+    "src/plugins/base_plugin.py": '''class BasePlugin:
+    name = "Base Plugin"
+    page_key = "base"
+    button_text = "Base"
+
+    def create_page(self, parent, app_state):
+        raise NotImplementedError("Plugins must implement create_page()")
+''',
+
+    "src/plugins/dashboard_plugin.py": '''from plugins.base_plugin import BasePlugin
+from gui.pages.dashboard_page import DashboardPage
+
+
+class DashboardPlugin(BasePlugin):
+    name = "Dashboard Plugin"
+    page_key = "dashboard"
+    button_text = "Dashboard"
+
+    def create_page(self, parent, app_state):
+        return DashboardPage(parent, app_state)
+''',
+
+    "src/plugins/git_plugin.py": '''from plugins.base_plugin import BasePlugin
+from gui.pages.git_page import GitPage
+
+
+class GitPlugin(BasePlugin):
+    name = "Git Manager Plugin"
+    page_key = "git"
+    button_text = "Git Manager"
+
+    def create_page(self, parent, app_state):
+        return GitPage(parent, app_state)
+''',
+
+    "src/gui/app.py": '''import tkinter as tk
 
 from config.settings import WINDOW_TITLE, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT
 from core.app_state import AppState
@@ -111,3 +176,19 @@ class GHWorkspaceApp(tk.Tk):
         for page in self.pages.values():
             if hasattr(page, "apply_theme"):
                 page.apply_theme(theme)
+'''
+}
+
+
+def main():
+    for path, content in files.items():
+        file_path = Path(path)
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_text(content, encoding="utf-8")
+        print(f"Updated: {file_path}")
+
+    print("\\nV4.7 Plugin Framework created successfully.")
+
+
+if __name__ == "__main__":
+    main()
