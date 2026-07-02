@@ -1,8 +1,8 @@
 {
     "app_name": "GH Workspace Manager",
     "version": "4.4",
-    "theme": "dark",
-    "last_page": "dashboard",
+    "theme": "light",
+    "last_page": "workspace",
     "window_width": 1100,
     "window_height": 700
 }

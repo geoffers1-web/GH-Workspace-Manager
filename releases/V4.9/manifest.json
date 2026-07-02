@@ -1,0 +1,15 @@
+{
+    "name": "GH Workspace Manager",
+    "version": "4.9",
+    "release": "V4.9",
+    "description": "Release Package Structure",
+    "entry_point": "src/main.py",
+    "created_by": "GH Workspace Manager release builder",
+    "includes": [
+        "src",
+        "docs",
+        "README.md",
+        "CHANGELOG.md"
+    ],
+    "next_milestone": "V5.0 GH Workspace Builder"
+}
