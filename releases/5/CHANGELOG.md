@@ -1,5 +1,15 @@
 # Changelog
 
+## V5.2 - Project Explorer
+
+Added:
+- ProjectService
+- Project Explorer page
+- Project Explorer plugin
+- Project discovery
+- Project details panel
+- Project health status
+
 ## V5.1 - System Information & Health Center
 
 Added:
@@ -7,29 +17,12 @@ Added:
 - Health Center page
 - Health Center plugin
 - Health check report
-- Import verification inside the application
-- Builder launcher from the application
-- Versioned documentation folders
-- Architecture Guide
-- Developer Guide
-- User Guide
-- Release Notes
-- Roadmap
+- Versioned documentation
 
 ## V5.0 - GH Workspace Builder
 
 Added:
 - Builder/builder.py
-- Project structure validation
-- Python import verification
-- Git status command
+- Project validation
+- Import verification
 - Release snapshot creation
-- Release listing
-- Application launcher
-
-## V4.9 - Release Package Structure
-
-Added:
-- releases/ folder structure
-- release package snapshots
-- manifest.json release metadata
