@@ -7,6 +7,7 @@ from gui.theme_manager import ThemeManager
 from plugins.dashboard_plugin import DashboardPlugin
 from plugins.git_plugin import GitPlugin
 from plugins.workspace_plugin import WorkspacePlugin
+from plugins.health_plugin import HealthPlugin
 
 
 class GHWorkspaceApp(tk.Tk):
@@ -42,6 +43,7 @@ class GHWorkspaceApp(tk.Tk):
         self.plugin_manager.register_plugin(DashboardPlugin())
         self.plugin_manager.register_plugin(GitPlugin())
         self.plugin_manager.register_plugin(WorkspacePlugin())
+        self.plugin_manager.register_plugin(HealthPlugin())
 
     def create_sidebar(self):
         self.sidebar_title = tk.Label(self.sidebar, text="GH Workspace", font=("Arial", 14, "bold"))

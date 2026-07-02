@@ -1,5 +1,21 @@
 # Changelog
 
+## V5.1 - System Information & Health Center
+
+Added:
+- SystemInfoService
+- Health Center page
+- Health Center plugin
+- Health check report
+- Import verification inside the application
+- Builder launcher from the application
+- Versioned documentation folders
+- Architecture Guide
+- Developer Guide
+- User Guide
+- Release Notes
+- Roadmap
+
 ## V5.0 - GH Workspace Builder
 
 Added:
@@ -10,8 +26,6 @@ Added:
 - Release snapshot creation
 - Release listing
 - Application launcher
-- V5.0 documentation
-- V5.0 test checklist
 
 ## V4.9 - Release Package Structure
 
@@ -19,10 +33,3 @@ Added:
 - releases/ folder structure
 - release package snapshots
 - manifest.json release metadata
-
-## V4.8 - Workspace Scanner & Project Explorer
-
-Added:
-- Workspace Scanner plugin
-- Workspace Scanner page
-- Workspace scanning service

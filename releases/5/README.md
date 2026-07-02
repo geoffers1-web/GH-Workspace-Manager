@@ -1,6 +1,6 @@
 # GH Workspace Manager
 
-Current Version: V5.0 - GH Workspace Builder
+Current Version: V5.1 - System Information & Health Center
 
 GH Workspace Manager is a modular desktop application for managing a GitHub-based local workspace.
 
@@ -16,6 +16,8 @@ GH Workspace Manager is a modular desktop application for managing a GitHub-base
 - Workspace Scanner
 - Release package structure
 - GH Workspace Builder
+- System Information & Health Center
+- Versioned documentation
 
 ## Run Application
 
