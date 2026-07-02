@@ -1,0 +1,12 @@
+{
+    "name": "GH Workspace Manager",
+    "release": "5",
+    "entry_point": "src/main.py",
+    "created_by": "GH Workspace Builder V1.0",
+    "includes": [
+        "src",
+        "docs",
+        "README.md",
+        "CHANGELOG.md"
+    ]
+}
