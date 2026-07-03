@@ -1,6 +1,7 @@
 import tkinter as tk
 
-from config.settings import WINDOW_TITLE, DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT
+from config.settings import DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT
+from core.app_metadata import APP_NAME, APP_RELEASE, APP_AUTHOR, APP_DESCRIPTION, get_window_title
 from core.app_state import AppState
 from core.plugin_manager import PluginManager
 from gui.theme_manager import ThemeManager
@@ -23,7 +24,7 @@ class GHWorkspaceApp(tk.Tk):
         width = self.app_state.config_manager.get("window_width", DEFAULT_WINDOW_WIDTH)
         height = self.app_state.config_manager.get("window_height", DEFAULT_WINDOW_HEIGHT)
 
-        self.title(WINDOW_TITLE)
+        self.title(get_window_title())
         self.geometry(f"{width}x{height}")
 
         self.sidebar = tk.Frame(self, width=200)
@@ -50,7 +51,7 @@ class GHWorkspaceApp(tk.Tk):
         self.plugin_manager.register_plugin(SearchPlugin())
 
     def create_sidebar(self):
-        self.sidebar_title = tk.Label(self.sidebar, text="GH Workspace", font=("Arial", 14, "bold"))
+        self.sidebar_title = tk.Label(self.sidebar, text=f"{APP_NAME} {APP_RELEASE}", font=("Arial", 14, "bold"))
         self.sidebar_title.pack(pady=20)
 
         for plugin in self.plugin_manager.get_plugins():
@@ -66,6 +67,10 @@ class GHWorkspaceApp(tk.Tk):
         self.theme_button = tk.Button(self.sidebar, text="Toggle Theme", width=20, command=self.toggle_theme)
         self.theme_button.pack(pady=25)
         self.buttons.append(self.theme_button)
+
+        self.about_button = tk.Button(self.sidebar, text="About", width=20, command=self.show_about)
+        self.about_button.pack(pady=5)
+        self.buttons.append(self.about_button)
 
     def create_pages(self):
         for plugin in self.plugin_manager.get_plugins():
@@ -87,6 +92,40 @@ class GHWorkspaceApp(tk.Tk):
         self.theme_manager.set_theme_name(new_theme)
         self.apply_theme()
 
+    def show_about(self):
+        about_window = tk.Toplevel(self)
+        about_window.title(f"About {APP_NAME}")
+        about_window.geometry("420x220")
+        about_window.resizable(False, False)
+
+        theme = self.theme_manager.get_theme()
+        about_window.configure(bg=theme["bg"])
+
+        title = tk.Label(
+            about_window,
+            text=f"{APP_NAME} {APP_RELEASE}",
+            font=("Arial", 16, "bold"),
+            bg=theme["bg"],
+            fg=theme["fg"]
+        )
+        title.pack(pady=(20, 10))
+
+        description = tk.Label(
+            about_window,
+            text=APP_DESCRIPTION,
+            wraplength=360,
+            bg=theme["bg"],
+            fg=theme["fg"]
+        )
+        description.pack(pady=5)
+
+        author = tk.Label(
+            about_window,
+            text=f"Author: {APP_AUTHOR}",
+            bg=theme["bg"],
+            fg=theme["fg"]
+        )
+        author.pack(pady=10)
     def apply_theme(self):
         theme = self.theme_manager.get_theme()
 
