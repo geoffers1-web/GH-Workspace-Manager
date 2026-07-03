@@ -6,7 +6,7 @@ This file is the single source of truth for application identity.
 
 APP_NAME = "GH Workspace"
 APP_VERSION = "5.5"
-APP_RELEASE = "V6.3"
+APP_RELEASE = "V6.4"
 APP_AUTHOR = "Geoffrey D Hinds"
 APP_DESCRIPTION = "Professional desktop workspace manager for GitHub-based projects."
 

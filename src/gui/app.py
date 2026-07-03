@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from core.startup_diagnostics import run_startup_diagnostics
 from core.exception_handler import handle_exception
 from core.logger import setup_logger
 from gui.preferences_dialog import PreferencesDialog
@@ -21,6 +22,7 @@ class GHWorkspaceApp(tk.Tk):
         super().__init__()
         self.logger = setup_logger()
         self.logger.info("GH Workspace Manager starting")
+        run_startup_diagnostics()
 
         self.app_state = AppState()
         self.theme_manager = ThemeManager(self.app_state)
