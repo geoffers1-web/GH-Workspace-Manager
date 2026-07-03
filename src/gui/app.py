@@ -30,13 +30,26 @@ class GHWorkspaceApp(tk.Tk):
         self.sidebar = tk.Frame(self, width=200)
         self.sidebar.pack(side="left", fill="y")
 
-        self.content = tk.Frame(self)
-        self.content.pack(side="right", expand=True, fill="both")
+        self.main_area = tk.Frame(self)
+        self.main_area.pack(side="right", expand=True, fill="both")
+
+        self.content = tk.Frame(self.main_area)
+        self.content.pack(side="top", expand=True, fill="both")
+
+        self.status_bar = tk.Label(
+            self.main_area,
+            text=self.get_status_text(),
+            anchor="w",
+            relief="sunken",
+            padx=8
+        )
+        self.status_bar.pack(side="bottom", fill="x")
 
         self.pages = {}
         self.buttons = []
 
         self.register_plugins()
+        self.create_menu_bar()
         self.create_sidebar()
         self.create_pages()
         self.apply_theme()
@@ -50,8 +63,37 @@ class GHWorkspaceApp(tk.Tk):
         self.plugin_manager.register_plugin(ProjectPlugin())
         self.plugin_manager.register_plugin(SearchPlugin())
 
+    def create_menu_bar(self):
+        menu_bar = tk.Menu(self)
+
+        file_menu = tk.Menu(menu_bar, tearoff=0)
+        file_menu.add_command(label="Exit", command=self.quit)
+        menu_bar.add_cascade(label="File", menu=file_menu)
+
+        view_menu = tk.Menu(menu_bar, tearoff=0)
+        for plugin in self.plugin_manager.get_plugins():
+            view_menu.add_command(
+                label=plugin.button_text,
+                command=lambda page_key=plugin.page_key: self.show_page(page_key)
+            )
+        menu_bar.add_cascade(label="View", menu=view_menu)
+
+        tools_menu = tk.Menu(menu_bar, tearoff=0)
+        tools_menu.add_command(label="Toggle Theme", command=self.toggle_theme)
+        menu_bar.add_cascade(label="Tools", menu=tools_menu)
+
+        help_menu = tk.Menu(menu_bar, tearoff=0)
+        help_menu.add_command(label="About", command=self.show_about)
+        menu_bar.add_cascade(label="Help", menu=help_menu)
+
+        self.config(menu=menu_bar)
+
     def create_sidebar(self):
-        self.sidebar_title = tk.Label(self.sidebar, text=f"{APP_NAME} {APP_RELEASE}", font=("Arial", 14, "bold"))
+        self.sidebar_title = tk.Label(
+            self.sidebar,
+            text=f"{APP_NAME} {APP_RELEASE}",
+            font=("Arial", 14, "bold")
+        )
         self.sidebar_title.pack(pady=20)
 
         for plugin in self.plugin_manager.get_plugins():
@@ -64,11 +106,21 @@ class GHWorkspaceApp(tk.Tk):
             button.pack(pady=5)
             self.buttons.append(button)
 
-        self.theme_button = tk.Button(self.sidebar, text="Toggle Theme", width=20, command=self.toggle_theme)
+        self.theme_button = tk.Button(
+            self.sidebar,
+            text="Toggle Theme",
+            width=20,
+            command=self.toggle_theme
+        )
         self.theme_button.pack(pady=25)
         self.buttons.append(self.theme_button)
 
-        self.about_button = tk.Button(self.sidebar, text="About", width=20, command=self.show_about)
+        self.about_button = tk.Button(
+            self.sidebar,
+            text="About",
+            width=20,
+            command=self.show_about
+        )
         self.about_button.pack(pady=5)
         self.buttons.append(self.about_button)
 
@@ -85,12 +137,22 @@ class GHWorkspaceApp(tk.Tk):
 
         self.app_state.set_current_page(name)
         self.pages[name].tkraise()
+        self.update_status_bar()
 
     def toggle_theme(self):
         current_theme = self.theme_manager.get_theme_name()
         new_theme = "dark" if current_theme == "light" else "light"
         self.theme_manager.set_theme_name(new_theme)
         self.apply_theme()
+        self.update_status_bar()
+
+    def get_status_text(self):
+        theme_name = self.theme_manager.get_theme_name().title()
+        current_page = self.app_state.current_page.title()
+        return f"Ready | Page: {current_page} | Theme: {theme_name} | Version: {APP_RELEASE}"
+
+    def update_status_bar(self):
+        self.status_bar.configure(text=self.get_status_text())
 
     def show_about(self):
         about_window = tk.Toplevel(self)
@@ -126,12 +188,19 @@ class GHWorkspaceApp(tk.Tk):
             fg=theme["fg"]
         )
         author.pack(pady=10)
+
     def apply_theme(self):
         theme = self.theme_manager.get_theme()
 
         self.configure(bg=theme["bg"])
         self.sidebar.configure(bg=theme["sidebar_bg"])
+        self.main_area.configure(bg=theme["content_bg"])
         self.content.configure(bg=theme["content_bg"])
+
+        self.status_bar.configure(
+            bg=theme["sidebar_bg"],
+            fg=theme["fg"]
+        )
 
         self.sidebar_title.configure(bg=theme["sidebar_bg"], fg=theme["fg"])
 
@@ -146,3 +215,5 @@ class GHWorkspaceApp(tk.Tk):
         for page in self.pages.values():
             if hasattr(page, "apply_theme"):
                 page.apply_theme(theme)
+
+        self.update_status_bar()

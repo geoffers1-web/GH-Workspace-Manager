@@ -2,7 +2,7 @@
     "app_name": "GH Workspace Manager",
     "version": "4.4",
     "theme": "dark",
-    "last_page": "projects",
+    "last_page": "search",
     "window_width": 1100,
     "window_height": 700
 }
