@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from core.exception_handler import handle_exception
 from core.logger import setup_logger
 from gui.preferences_dialog import PreferencesDialog
 from config.settings import DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT
@@ -138,12 +139,16 @@ class GHWorkspaceApp(tk.Tk):
             page.place(relwidth=1, relheight=1)
 
     def show_page(self, name):
-        if name not in self.pages:
-            name = "dashboard"
+        try:
+            if name not in self.pages:
+                name = "dashboard"
 
-        self.app_state.set_current_page(name)
-        self.pages[name].tkraise()
-        self.update_status_bar()
+            self.app_state.set_current_page(name)
+            self.pages[name].tkraise()
+            self.update_status_bar()
+
+        except Exception as error:
+            handle_exception(error, f"Failed to open page: {name}")
 
     def toggle_theme(self):
         current_theme = self.theme_manager.get_theme_name()
