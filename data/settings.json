@@ -1,0 +1,8 @@
+{
+    "theme": "system",
+    "startup_view": "dashboard",
+    "show_status_bar": true,
+    "autosave": true,
+    "window_width": 1100,
+    "window_height": 700
+}

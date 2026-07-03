@@ -1,15 +1,6 @@
 import json
 from pathlib import Path
 
-import json
-from pathlib import Path
-
-APP_NAME = "GH Workspace Manager"
-APP_VERSION = "6.1"
-BUILDER_VERSION = "V6.1"
-
-DEFAULT_WINDOW_WIDTH = 1100
-DEFAULT_WINDOW_HEIGHT = 700
 DEFAULT_WINDOW_WIDTH = 1100
 DEFAULT_WINDOW_HEIGHT = 700
 

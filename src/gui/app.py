@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from gui.preferences_dialog import PreferencesDialog
 from config.settings import DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT
 from core.app_metadata import APP_NAME, APP_RELEASE, APP_AUTHOR, APP_DESCRIPTION, get_window_title
 from core.app_state import AppState
@@ -80,6 +81,8 @@ class GHWorkspaceApp(tk.Tk):
 
         tools_menu = tk.Menu(menu_bar, tearoff=0)
         tools_menu.add_command(label="Toggle Theme", command=self.toggle_theme)
+        tools_menu.add_separator()
+        tools_menu.add_command(label="Preferences", command=self.open_preferences)
         menu_bar.add_cascade(label="Tools", menu=tools_menu)
 
         help_menu = tk.Menu(menu_bar, tearoff=0)
@@ -150,6 +153,13 @@ class GHWorkspaceApp(tk.Tk):
         theme_name = self.theme_manager.get_theme_name().title()
         current_page = self.app_state.current_page.title()
         return f"Ready | Page: {current_page} | Theme: {theme_name} | Version: {APP_RELEASE}"
+
+    def open_preferences(self):
+        PreferencesDialog(self, on_save=self.on_preferences_saved)
+
+    def on_preferences_saved(self, settings):
+        self.update_status_bar()
+        self.status_bar.configure(text="Preferences saved.")
 
     def update_status_bar(self):
         self.status_bar.configure(text=self.get_status_text())
