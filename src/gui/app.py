@@ -1,5 +1,6 @@
 import tkinter as tk
 
+from core.logger import setup_logger
 from gui.preferences_dialog import PreferencesDialog
 from config.settings import DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT
 from core.app_metadata import APP_NAME, APP_RELEASE, APP_AUTHOR, APP_DESCRIPTION, get_window_title
@@ -17,6 +18,8 @@ from plugins.search_plugin import SearchPlugin
 class GHWorkspaceApp(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.logger = setup_logger()
+        self.logger.info("GH Workspace Manager starting")
 
         self.app_state = AppState()
         self.theme_manager = ThemeManager(self.app_state)
